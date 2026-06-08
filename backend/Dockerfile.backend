@@ -1,0 +1,31 @@
+# ---------- BUILD STAGE ----------
+FROM python:3.14-slim-trixie AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libmariadb-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /install
+
+COPY requirements.txt .
+
+RUN pip install --upgrade pip && \
+    pip install --prefix=/install --no-cache-dir -r requirements.txt
+
+
+# ---------- RUNTIME STAGE ----------
+FROM python:3.14-slim-trixie
+
+WORKDIR /app
+
+# copiar solo las dependencias ya instaladas
+COPY --from=builder /install /usr/local
+
+# copiar código de la aplicación
+COPY ./app ./app
+COPY ./json_resources ./json_resources
+
+EXPOSE 8000
+
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "1"]
