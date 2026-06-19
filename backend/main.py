@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.routes import router as api_router
 from starlette.middleware.cors import CORSMiddleware
+from app.config.config import config_db
 import uvicorn
 
 app = FastAPI()
@@ -16,6 +17,10 @@ app.add_middleware(
     allow_headers=["*"],
     expose_headers=["*"]
 )
+
+@app.get("/")
+async def health_check():
+    return "Contenedor conectado"
 
 app.include_router(api_router)
 
