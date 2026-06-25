@@ -6,8 +6,15 @@ state = {
 }
 
 def get_connection():
-    if state['connection']:
-        connection_string = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER={config_db['db_host']};DATABASE={config_db['db_name']};UID={config_db['db_user']};PWD={config_db['db_password']}"
+    if state['connection'] is None:
+        connection_string = (
+            f"DRIVER={{ODBC Driver 18 for SQL Server}};"
+            f"SERVER={config_db['db_host']};"
+            f"DATABASE={config_db['db_name']};"
+            f"UID={config_db['db_user']};"
+            f"PWD={config_db['db_password']};"
+            "Encrypt=yes;TrustServerCertificate=yes"
+        )
         state['connection'] = pyodbc.connect(connection_string)
     return state['connection']
 

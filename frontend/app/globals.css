@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #3491fa;
+  --color-secondary: #ddf2fe;
+  --color-accent: #fb4f8d;
+
+  --color-bg: #e9eeee;
+  --color-conteiner: #f7f7f7;
+  
+  --tipografy-title: #333;
+  --tipografy-subtitle: #666;
+  --tipografy-clear: #999;
+
+  --rounded-border: 20px;
+}
+
+* {
+  /* padding: 0;
+  margin: 0; */
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.sr-only:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

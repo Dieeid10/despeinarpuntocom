@@ -1,0 +1,4 @@
+export const env = {
+    api_url: process.env.NEXT_PUBLIC_API_URL,
+    mode: process.env.NEXT_PUBLIC_MODE
+}

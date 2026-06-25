@@ -2,10 +2,10 @@ from jwt import encode, decode, ExpiredSignatureError, InvalidTokenError
 from fastapi import HTTPException, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.config.config import config_jwt
-import datetime
+from datetime import datetime, timedelta, timezone
 
 def create_jwt(data: dict) -> str:
-    expiration = datetime.now() + datetime.timedelta(hours=config_jwt["expiration_seconds"])
+    expiration = datetime.now() + timedelta(hours=config_jwt["expiration_seconds"])
     data.update({"exp": expiration.timestamp()})
     token: str = encode(payload=data, key=config_jwt["secret"], algorithm=config_jwt["algorithm"])
     return token
