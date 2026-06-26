@@ -15,9 +15,8 @@ def get_vuelo_by_id(vuelo_id: int):
     return vuelo
 
 def create_vuelo(tipo_vuelo: str, origen_id: str, destino_id: str, fecha_salida: str, fecha_llegada: str, id_aerolinea: int, asientos: list[dict] = []):
-    database['execute_procedure']('sp_insert_vuelo', (tipo_vuelo, origen_id, destino_id, fecha_salida, fecha_llegada, id_aerolinea))
-    result = database['select_case']('SELECT MAX(vuelo_id) AS id FROM vuelos')
-    vuelo_id = result[0]['id']
+    result = database['execute_procedure']('sp_insert_vuelo', (tipo_vuelo, origen_id, destino_id, fecha_salida, fecha_llegada, id_aerolinea))
+    vuelo_id = result[0]['sp_insert_vuelo']
 
     for asiento in asientos:
         database['insert_case'](

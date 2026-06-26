@@ -13,10 +13,8 @@ def get_reserva_by_id(reserva_id: int):
     return reserva
 
 def create_reserva(cliente_id: str, tipo_reserva: str, paquete_id: int = None, vuelos: list[int] = [], servicios: list[dict] = [], pasajero: dict = None):
-    database['execute_procedure']('sp_insert_reserva', (cliente_id, paquete_id, tipo_reserva))
-
-    result = database['select_case']('SELECT MAX(reserva_id) AS id FROM reservas')
-    reserva_id = result[0]['id']
+    result = database['execute_procedure']('sp_insert_reserva', (cliente_id, paquete_id, tipo_reserva))
+    reserva_id = result[0]['sp_insert_reserva']
 
     for vuelo_id in vuelos:
         database['insert_case']('INSERT INTO reservas_vuelos (reserva_id, vuelo_id) VALUES (?, ?)', (reserva_id, vuelo_id))
@@ -74,7 +72,7 @@ def delete_reserva(reserva_id: int):
     database['delete_case']('DELETE FROM reservas WHERE reserva_id = ?', (reserva_id,))
 
 def registrar_pago(reserva_id: int, monto: float, metodo_pago: str, comprobante: str):
-    database['execute_procedure']('sp_insert_pago', (reserva_id, monto, metodo_pago, comprobante))
+    database['execute_procedure']('sp_insert_pago', (reserva_id, monto, metodo_pago, 'completado', comprobante))
 
 def get_servicios_by_id(reserva_id: int):
     services = database['execute_procedure']('sp_get_servicios_reserva', (reserva_id,))

@@ -11,29 +11,25 @@ def get_user_by_username(username: str):
     return result[0]
 
 def create_user(nombre: str, apellido: str, email: str, password: str, rol_id: int):
-    database['insert_case'](
-        """INSERT INTO usuarios (usuario_id, nombre, apellido, email, password_hash, rol_id)
-           VALUES (NEWID(), ?, ?, ?, LOWER(CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', ?), 2)), ?)""",
-        (nombre, apellido, email, password, rol_id)
-    )
+    database['execute_procedure']('sp_insert_user', (nombre, apellido, email, password, rol_id))
     return f"Se ha insertado al usuario {nombre} {apellido} con exito"
 
 def update_user(usuario_id: UUID, nombre: str, apellido: str, email: str, rol_id: int):
     database['update_case'](
         'UPDATE usuarios SET nombre=?, apellido=?, email=?, rol_id=? WHERE usuario_id=?',
-        (nombre, apellido, email, rol_id, usuario_id)
+        (nombre, apellido, email, rol_id, str(usuario_id))
     )
     return f"Se ha actualizado al usuario {nombre} {apellido} con exito"
 
 def update_password(usuario_id: UUID, password: str):
     database['update_case'](
-        """UPDATE usuarios SET password_hash = LOWER(CONVERT(VARCHAR(255), HASHBYTES('SHA2_256', ?), 2)) WHERE usuario_id=?""",
-        (password, usuario_id)
+        """UPDATE usuarios SET password_hash = encode(digest(?, 'sha256'), 'hex') WHERE usuario_id=?""",
+        (password, str(usuario_id))
     )
     return f"Se ha actualizado la password de con exito"
 
 def delete_user(usuario_id: UUID):
-    database['delete_case']('DELETE FROM usuarios WHERE usuario_id = ?', (usuario_id,))
+    database['delete_case']('DELETE FROM usuarios WHERE usuario_id = ?', (str(usuario_id),))
     return f"Se ha eliminado al usuario con exito"
 
 def get_roles():

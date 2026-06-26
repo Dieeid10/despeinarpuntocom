@@ -7,10 +7,8 @@ def get_paquete_by_id(paquete_id: int):
     return database['select_case']('SELECT * FROM vw_paquetes_detalle WHERE paquete_id = ?', (paquete_id,))
 
 def create_paquete(nombre: str, descripcion: str, duracion_dias: int, precio: float, vuelos: list[int], servicios: list[int]):
-    database['execute_procedure']('sp_insert_paquete', (nombre, descripcion, duracion_dias, precio))
-
-    result = database['select_case']('SELECT MAX(paquete_id) AS id FROM paquetes')
-    paquete_id = result[0]['id']
+    result = database['execute_procedure']('sp_insert_paquete', (nombre, descripcion, duracion_dias, precio))
+    paquete_id = result[0]['sp_insert_paquete']
 
     for vuelo_id in vuelos:
         database['insert_case']('INSERT INTO paquetes_vuelos (paquete_id, vuelo_id) VALUES (?, ?)', (paquete_id, vuelo_id))
