@@ -57,7 +57,7 @@ export interface User {
     nombre: string
     apellido: string
     email: string
-    rol: string
+    rol_nombre: string
     rol_id: number
 }
 

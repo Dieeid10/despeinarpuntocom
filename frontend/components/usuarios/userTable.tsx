@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useUsers } from '@/hooks/useUsers'
 import { ModalForm } from '@/components/ui/modal'
+import { HeaderTagles } from '@/components/ui/HeaderTables'
 
 const USER_FIELDS = [
   { key: 'nombre', label: 'Nombre', type: 'text' as const, required: true },
@@ -45,15 +46,11 @@ export default function UsersTable() {
 
     return (
         <>
-            <header className=" flex justify-between items-center px-10 py-4 mb-6 bg-[var(--color-conteiner)]">
-                <h2 className="text-xl font-bold text-gray-800">Clientes</h2>
-                <button
-                    onClick={() => setModalData({})}
-                    className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-                >
-                    + Nuevo cliente
-                </button>
-            </header>
+            <HeaderTagles 
+                title='Usuarios'
+                textButton='+ Nuevo usuario'
+                openModal={() => setModalData({})}
+            />
 
             <div className="flex gap-3 mb-6">
                 <input
@@ -103,7 +100,7 @@ export default function UsersTable() {
                                         <p className="font-medium text-gray-800">{c.nombre} {c.apellido}</p>
                                     </td>
                                     <td className="px-4 py-3 text-gray-600">{c.email}</td>
-                                    <td className="px-4 py-3 text-gray-600">{c.rol}</td>
+                                    <td className="px-4 py-3 text-gray-600">{c.rol_nombre}</td>
                                     <td className="flex flex-col justify-center items-start px-4 py-3 gap-4">
                                         <button
                                             className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-md transition-colors"
