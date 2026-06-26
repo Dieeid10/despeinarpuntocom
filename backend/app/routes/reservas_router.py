@@ -78,3 +78,10 @@ async def delete_reservation(reserva_id: int):
     reservas_dict['delete_reserva'](reserva_id)
 
     return success(message='Reserva eliminada con exito.')
+
+@router.get('/adicionales/{reserva_id}')
+@route_handler
+async def get_adicionales_by_id(reserva_id: int):
+    servicios = reservas_dict['get_servicios_by_id'](reserva_id)
+
+    return success(data=servicios, message='Servicios recuperados con exito.')

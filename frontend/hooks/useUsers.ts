@@ -76,8 +76,7 @@ export function useUsers() {
 
   const usersFiltrados = useMemo(() => {
       return state.users.filter((c) => {
-        const matchEstado =
-          !state.filterRol || c.rol === state.filterRol;
+        const matchEstado = !state.filterRol || c.rol === state.filterRol
   
         const matchBusqueda =
             !state.busqueda ||
@@ -90,16 +89,7 @@ export function useUsers() {
   
         return matchEstado && matchBusqueda;
       });
-    }, [state.users, state.filterRol, state.busqueda, ]);
+    }, [state.users, state.filterRol, state.busqueda]);
 
-  return {
-    state,
-    patchState,
-    fetchUsers,
-    createUser,
-    updateUser,
-    deleteUser,
-    updatePassword,
-    usersFiltrados,
-  }
+  return { state, patchState, fetchUsers, createUser, updateUser, deleteUser, updatePassword, usersFiltrados }
 }

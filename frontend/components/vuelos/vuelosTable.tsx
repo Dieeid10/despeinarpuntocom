@@ -1,27 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { vuelosServices } from '@/services/vuelos'
-
-interface Vuelo {
-    vuelo_id: number
-    tipo_vuelo: 'nacional' | 'internacional'
-    fecha_salida: string
-    fecha_llegada: string
-    duracion_horas: number
-    origen_iata: string
-    origen_ciudad: string
-    origen_pais: string
-    destino_iata: string
-    destino_ciudad: string
-    destino_pais: string
-    aerolinea: string
-    total_asientos: number
-}
+import { useVuelos } from "@/hooks/useFlights"
+import { useState } from 'react'
+import { ModalForm } from '@/components/ui/modal'
+import { HeaderTagles } from "../ui/HeaderTables"
 
 const tipoStyles: Record<string, string> = {
-    nacional:       'bg-blue-100 text-blue-800',
-    internacional:  'bg-purple-100 text-purple-800',
+    nacional: 'bg-blue-100 text-blue-800',
+    internacional: 'bg-purple-100 text-purple-800',
 }
 
 const formatFecha = (fecha: string) =>
@@ -30,73 +16,69 @@ const formatFecha = (fecha: string) =>
         hour: '2-digit', minute: '2-digit'
     })
 
-export default function VuelosTable() {
-    const [vuelos, setVuelos]         = useState<Vuelo[]>([])
-    const [loading, setLoading]       = useState(true)
-    const [error, setError]           = useState<string | null>(null)
-    const [filtroTipo, setFiltroTipo] = useState('')
-    const [busqueda, setBusqueda]     = useState('')
+const VUELO_FIELDS = [
+  { key: 'tipo_vuelo', label: 'Tipo de vuelo', type: 'select' as const, required: true, 
+    options: [
+      { value: 'nacional', label: 'Nacional' },
+      { value: 'internacional', label: 'Internacional' },
+    ],
+  },
+  { key: 'origen_id', label: 'Aeropuerto de origen', type: 'text' as const, required: true },
+  { key: 'destino_id', label: 'Aeropuerto de destino', type: 'text' as const, required: true },
+  { key: 'fecha_salida', label: 'Fecha y hora de salida', type: 'datetime-local' as const, required: true },
+  { key: 'fecha_llegada', label: 'Fecha y hora de llegada', type: 'datetime-local' as const, required: true },
+  { key: 'id_aerolinea', label: 'ID de aerolínea', type: 'number' as const, required: true },
+]
+
+export function VuelosTable() {
+    const { state, patchState, fetchVuelos, createFlight, updateFlight, deleteFlight, vuelosFiltrados } = useVuelos()
     const [modalData, setModalData] = useState<Record<string, any> | null>(null)
+    console.log('La cantidad de vuelos recuperados son: ', vuelosFiltrados.length)
+    
+    if (vuelosFiltrados.length == 0) return (
+        <>
+            <HeaderTagles
+                title="Vuelos"
+                openModal={() => setModalData({})}
+                textButton="+ Nuevo vuelo"
+            />
+            <h1>No se encontraron vuelos</h1>
+        </>
+    )
 
-    useEffect(() => {
-        const fetchVuelos = async () => {
-            const result = await vuelosServices.getVuelos()
-            if (!result.success) {
-                setError(result.message)
-            } else {
-                setVuelos(result.data)
-            }
-            setLoading(false)
-        }
-        fetchVuelos()
-    }, [])
-
-    const vuelosFiltrados = vuelos.filter(v => {
-        const matchTipo     = !filtroTipo || v.tipo_vuelo === filtroTipo
-        const matchBusqueda = !busqueda   ||
-            v.origen_ciudad.toLowerCase().includes(busqueda.toLowerCase()) ||
-            v.destino_ciudad.toLowerCase().includes(busqueda.toLowerCase()) ||
-            v.aerolinea.toLowerCase().includes(busqueda.toLowerCase())
-        return matchTipo && matchBusqueda
-    })
-
-    if (loading) return (
+    if (state.loading) return (
         <div className="flex justify-center items-center h-full">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
     )
 
-    if (error) return (
+    if (state.error) return (
         <div className="p-6">
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-                {error}
+                {state.error}
             </div>
         </div>
     )
 
     return (
         <>
-            <header className=" flex justify-between items-center px-10 py-4 mb-6 bg-[var(--color-conteiner)]">
-                <h2 className="text-xl font-bold text-gray-800">Vuelos</h2>
-                <button
-                    onClick={() => setModalData({})}
-                    className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-                >
-                    + Nuevo vuelo
-                </button>
-            </header>
+            <HeaderTagles
+                title="Vuelos"
+                openModal={() => setModalData({})}
+                textButton="+ Nuevo vuelo"
+            />
 
             <div className="flex gap-3 mb-6 flex-wrap">
                 <input
                     type="text"
                     placeholder="Buscar ciudad o aerolínea..."
-                    value={busqueda}
-                    onChange={e => setBusqueda(e.target.value)}
+                    value={state.busqueda}
+                    onChange={e => patchState({ busqueda: e.target.value })}
                     className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <select
-                    value={filtroTipo}
-                    onChange={e => setFiltroTipo(e.target.value)}
+                    value={state.filterType}
+                    onChange={e => patchState({ filterType: e.target.value })}
                     className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="">Todos los tipos</option>
@@ -164,6 +146,31 @@ export default function VuelosTable() {
             <p className="text-xs text-gray-400 mt-2">
                 {vuelosFiltrados.length} vuelos encontrados
             </p>
+            {
+                modalData &&
+                <ModalForm
+                    title={
+                        modalData?.vuelo_id
+                        ? 'Editar vuelo'
+                        : 'Nuevo vuelo'
+                    }
+                    fields={VUELO_FIELDS}
+                    initialData={modalData ?? undefined}
+                    onClose={() => setModalData(null)}
+                    onSubmit={async (data) => {
+                        console.log(data)
+                        if (data?.id) {
+                            console.log('Esta ejecutando el update')
+                            return await updateFlight(
+                                data.id,
+                                data
+                            )
+                        }
+
+                        return await createFlight(data)
+                    }}
+                />
+            }
         </>
     )
 }

@@ -234,8 +234,6 @@ INSERT INTO reservas_vuelos (reserva_id, vuelo_id) VALUES
 
 -- =============================================
 -- PASAJEROS DE RESERVA
--- Ahora una familia/grupo se representa como:
--- 1 reserva + varios pasajeros + 1 asiento por pasajero.
 -- =============================================
 
 INSERT INTO reservas_pasajeros (reserva_id, nombre, apellido, documento, asiento_id) VALUES

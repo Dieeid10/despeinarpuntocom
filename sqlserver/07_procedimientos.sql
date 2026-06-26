@@ -258,7 +258,7 @@ BEGIN
     ON r.reserva_id = rp.reserva_id
 
     LEFT JOIN asientos AS a
-    ON ra.asiento_id = a.asiento_id
+    ON rp.asiento_id = a.asiento_id
 
     LEFT JOIN paquetes AS p
     ON r.paquete_id = p.paquete_id
@@ -345,5 +345,19 @@ BEGIN
     UPDATE reservas
     SET estado = 'confirmada'
     WHERE reserva_id = ( SELECT reserva_id FROM pagos WHERE pago_id = @pago_id )
+END
+GO
+
+/* Procedimientos de servicios adicionales */
+CREATE PROCEDURE sp_get_servicios_reserva
+    @reserva_id INT
+AS
+BEGIN
+
+    SELECT s.servicio_id, s.nombre, s.tipo, s.descripcion, s.precio, rs.cantidad, s.precio * rs.cantidad AS subtotal
+    FROM reservas_servicios AS rs
+    INNER JOIN servicios_adicionales AS s
+    ON rs.servicio_id = s.servicio_id
+    WHERE rs.reserva_id = @reserva_id
 END
 GO

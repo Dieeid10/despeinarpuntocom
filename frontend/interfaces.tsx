@@ -15,6 +15,7 @@ export interface Reserva {
     cliente_nombre: string
     cliente_email: string
     pasajero_nombre: string | null
+    pasajero_documento: string | null
     numero_asiento: string | null
     tipo_asiento: string | null
     paquete_nombre: string | null
@@ -66,4 +67,62 @@ export interface Password {
 
 export interface LoginData {
     token: string
+}
+
+export interface ServicioAdicionalReserva {
+  servicio_id: number
+  nombre: string
+  tipo: string
+  descripcion: string
+  precio: number
+  cantidad: number
+  subtotal: number
+}
+
+export interface ServiciosReservaState {
+  servicios: ServicioAdicionalReserva[]
+  loading: boolean
+  error: string | null
+}
+
+export interface VuelosState {
+    vuelos: Vuelo[]
+    loading: boolean
+    error: string | null
+    busqueda: string
+    filterType: string
+}
+
+export interface Vuelo {
+  vuelo_id: number
+  tipo_vuelo: 'nacional' | 'internacional' | string
+  fecha_salida: string
+  fecha_llegada: string
+  duracion_horas: number
+  origen_iata: string
+  origen_ciudad: string
+  origen_pais: string
+  destino_iata: string
+  destino_ciudad: string
+  destino_pais: string
+  aerolinea: string
+  total_asientos: number
+}
+
+export interface PaquetesState {
+    vuelos: Paquete[]
+    loading: boolean
+    error: string | null
+}
+
+export interface Paquete {
+  paquete_id: number
+  nombre: string
+  descripcion: string
+  duracion_dias: number
+  precio: number
+  activo: boolean
+
+  cantidad_vuelos: number
+  cantidad_servicios: number
 }

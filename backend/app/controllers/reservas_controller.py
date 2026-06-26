@@ -76,6 +76,11 @@ def delete_reserva(reserva_id: int):
 def registrar_pago(reserva_id: int, monto: float, metodo_pago: str, comprobante: str):
     database['execute_procedure']('sp_insert_pago', (reserva_id, monto, metodo_pago, comprobante))
 
+def get_servicios_by_id(reserva_id: int):
+    services = database['execute_procedure']('sp_get_servicios_reserva', (reserva_id,))
+    print('Services es: ', services)
+    return services
+
 reservas_dict = {
     'get_reservas': get_reservas,
     'get_reserva_by_id': get_reserva_by_id,
@@ -84,4 +89,5 @@ reservas_dict = {
     'update_reserva': update_reserva,
     'delete_reserva': delete_reserva,
     'registrar_pago': registrar_pago,
+    'get_servicios_by_id': get_servicios_by_id
 }

@@ -16,7 +16,10 @@ export const urls = {
         registerPaymentById: (reservation_id: string ) => `/reservarion/${reservation_id}/payment`,
     },
     flights: {
-        getFlights: '/flights'
+        getFlights: '/flights',
+        createFlights: '/flights',
+        updateFlight: (fligth_id: number) => `/flights/${fligth_id}`,
+        deleteFlight: (fligth_id: number) => `/flights/${fligth_id}`
     },
     packages: {
         getPackages: '/packages'
@@ -26,5 +29,8 @@ export const urls = {
         createClient: '/clients',
         updateClient: (client_id: string) => `/clients/${client_id}`,
         deleteClient: (client_id: string) => `/clients/${client_id}`
+    },
+    services: {
+        getByReserveId: (reservation_id: number) => `/reservations/adicionales/${reservation_id}`
     }
 }

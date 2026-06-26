@@ -2,7 +2,8 @@
 
 import { useClients } from '@/hooks/useClient'
 import { useState } from 'react'
-import { ModalForm } from '../ui/modal'
+import { ModalForm } from '@/components/ui/modal'
+import { HeaderTagles } from '../ui/HeaderTables'
 
 const CLIENT_FIELDS = [
     { key: 'nombre', label: 'Nombre', type: 'text' as const, required: true },
@@ -34,15 +35,11 @@ export default function ClientsTable() {
 
     return (
         <>
-            <header className=" flex justify-between items-center px-10 py-4 mb-6 bg-[var(--color-conteiner)]">
-                <h2 className="text-xl font-bold text-gray-800">Clientes</h2>
-                <button
-                    onClick={() => setModalData({})}
-                    className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium px-4 py-2 rounded-md transition-colors"
-                >
-                    + Nuevo cliente
-                </button>
-            </header>
+            <HeaderTagles
+                title="Cleintes"
+                openModal={() => setModalData({})}
+                textButton="+ Nuevo cliente"
+            />
 
             <div className="flex gap-3 mb-6">
                 <input
