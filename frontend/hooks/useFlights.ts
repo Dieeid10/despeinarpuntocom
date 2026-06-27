@@ -18,7 +18,7 @@ export function useVuelos() {
         patchState({ loading: true, error: null })
 
         const result = await vuelosServices.getVuelos()
-        console.log('Result es: ', result)
+        console.log('Result es de vuelos es : ', result)
 
         if (!result.success) {
             patchState({
@@ -48,7 +48,7 @@ export function useVuelos() {
         const result = await vuelosServices.updateVuelo(flight_id, flight)
 
         if (result.success) {
-            await fetchVuelos
+            await fetchVuelos()
         }
 
         return result
@@ -58,14 +58,14 @@ export function useVuelos() {
         const result = await vuelosServices.deleteVuelo(flight_id)
 
         if (result.success) {
-            await fetchVuelos
+            await fetchVuelos()
         }
 
         return result
     }
 
     useEffect(() => {
-
+        fetchVuelos()
     }, [fetchVuelos])
 
     const vuelosFiltrados = useMemo(() => {

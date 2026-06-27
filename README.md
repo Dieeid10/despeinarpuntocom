@@ -111,11 +111,11 @@ Variables principales:
 
 ```env
 # SQL Server
-SQLSERVER_HOST=sqlserver
-SQLSERVER_PORT=1433
-SQLSERVER_USER=sa
+SQLSERVER_HOST=<host>
+SQLSERVER_PORT=<port>
+SQLSERVER_USER=<user>
 SQLSERVER_PASSWORD=<contraseña_segura>
-SQLSERVER_DATABASE=master
+SQLSERVER_DATABASE=<database_name>
 
 # Puertos expuestos en el host
 SQLSERVER_EXTERNAL_PORT=1433
@@ -175,17 +175,16 @@ docker compose up sqlserver adminer
 ### Backend
 
 ```bash
-cd backend
 uv sync
-uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+uvicorn main:app --reload --app-dir backend --host 127.0.0.1 --port 8000
 ```
 
 ### Frontend
 
 ```bash
 cd frontend
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Usuarios de prueba

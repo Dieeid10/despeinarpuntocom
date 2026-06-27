@@ -27,11 +27,11 @@ async def login(request: Request):
 
     password_hash = hashlib.sha256(password.encode()).hexdigest()
     result = user_dict['get_user_by_username'](username)
-
+    print(result)
     if not result or result['password_hash'] != password_hash:
         unauthorized()
 
-    token = create_jwt({'username': username, 'rol': result['rol']})
+    token = create_jwt({'username': username, 'rol': result['rol_nombre']})
 
     return success(data={"token": token}, message='Login exitoso.')
 
