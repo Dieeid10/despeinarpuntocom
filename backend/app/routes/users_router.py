@@ -9,7 +9,7 @@ import hashlib
 
 router = APIRouter()
 
-@router.get("/")
+@router.get("")
 async def recuperate_users():
     result = user_dict['get_users']()
     
@@ -35,7 +35,7 @@ async def login(request: Request):
 
     return success(data={"token": token}, message='Login exitoso.')
 
-@router.post("/")
+@router.post("")
 @route_handler
 async def create_user(request: Request):
     body = await request.json()
