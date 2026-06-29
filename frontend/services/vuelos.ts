@@ -1,10 +1,23 @@
-import { client } from '@/services/api'
+import { api } from '@/services/api'
 import { urls } from './urls'
 import type { Vuelo } from '@/interfaces'
 
 export const vuelosServices = {
-    getVuelos: () => client.get(urls.flights.getFlights),
-    createVuelo: (flight: Vuelo) => client.post(urls.flights.createFlights, flight),
-    updateVuelo: (flight_id: number, flight: Vuelo ) => client.put(urls.flights.updateFlight(flight_id), flight),
-    deleteVuelo: (flight_id: number) => client.delete(urls.flights.deleteFlight(flight_id))
+  getVuelos: () =>
+    api.get<Vuelo[]>(urls.flights.getFlights),
+
+  createVuelo: (flight: Vuelo) =>
+    api.post<Vuelo, Vuelo>(
+      urls.flights.createFlights,
+      flight
+    ),
+
+  updateVuelo: (flight_id: number, flight: Partial<Vuelo>) =>
+    api.put<Vuelo, Partial<Vuelo>>(
+      urls.flights.updateFlight(flight_id),
+      flight
+    ),
+
+  deleteVuelo: (flight_id: number) =>
+    api.delete<null>(urls.flights.deleteFlight(flight_id)),
 }

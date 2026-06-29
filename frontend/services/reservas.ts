@@ -1,30 +1,36 @@
-import { client } from '@/services/api'
+import { api } from '@/services/api'
 import { urls } from './urls'
+import type { Reserva } from '@/interfaces'
 
 export const reservasServices = {
-  getReservas: () => {
-    return client.get(urls.reservations.getReservations)
-  },
+  getReservas: () =>
+    api.get<Reserva[]>(urls.reservations.getReservations),
 
-  getReservaFormById: (reservation_id: number) => {
-    return client.get(urls.reservations.getReservationFormById(reservation_id))
-  },
+  getReservaFormById: (reservation_id: number) =>
+    api.get<Reserva>(
+      urls.reservations.getReservationFormById(reservation_id)
+    ),
 
-  createReserva: (data: any) => {
-    return client.post(urls.reservations.createReservation, data)
-  },
+  createReserva: (data: Reserva) =>
+    api.post<Reserva, Reserva>(
+      urls.reservations.createReservation,
+      data
+    ),
 
-  updateReserva: (reservation_id: number, data: any) => {
-    return client.put(urls.reservations.updateReservation(reservation_id), data)
-  },
+  updateReserva: (reservation_id: number, data: Partial<Reserva>) =>
+    api.put<Reserva, Partial<Reserva>>(
+      urls.reservations.updateReservationById(reservation_id),
+      data
+    ),
 
-  deleteReserva: (reservation_id: number) => {
-    return client.delete(urls.reservations.deleteReservation(reservation_id))
-  },
+  deleteReserva: (reservation_id: number) =>
+    api.delete<null>(
+      urls.reservations.deteleReservationById(reservation_id)
+    ),
 
-  updateEstadoReserva: (reservation_id: number, estado: string) => {
-    return client.put(urls.reservations.updateReservationStatus(reservation_id), {
-      estado,
-    })
-  },
+  updateEstadoReserva: (reservation_id: number, estado: string) =>
+    api.put<Reserva, { estado: string }>(
+      urls.reservations.updateReservationStatus(reservation_id),
+      { estado }
+    ),
 }

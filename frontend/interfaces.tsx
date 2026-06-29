@@ -24,10 +24,11 @@ export interface Reserva {
     monto_pagado: number | null
     metodo_pago: string | null
     estado_pago: string | null
+    reserva_pasajero_id: number
 }
 
 export interface Client {
-    id?: string
+    id: string
     nombre: string
     apellido: string
     documento: string
@@ -140,4 +141,13 @@ export interface Asiento {
     tipo_asiento: string
     numero_asiento: string
     precio_base: number
+}
+
+export interface ServicioReserva {
+  service_id: number
+  reservation_id: number
+  nombre: string
+  descripcion?: string
+  precio: number
+  estado?: string
 }

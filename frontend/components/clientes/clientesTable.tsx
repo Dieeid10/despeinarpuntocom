@@ -4,6 +4,7 @@ import { useClient } from '@/hooks/useClient'
 import { useState } from 'react'
 import { ModalForm } from '@/components/ui/modal'
 import { HeaderTagles } from '../ui/HeaderTables'
+import { Client } from '@/interfaces'
 
 const CLIENT_FIELDS = [
     { key: 'nombre', label: 'Nombre', type: 'text' as const, required: true },
@@ -87,9 +88,15 @@ export default function ClientsTable() {
                                     <td className="px-4 py-3">
                                         <button
                                             onClick={() => setModalData(c)}
-                                            className="text-xs text-blue-600 hover:underline"
+                                            className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 text-xs font-medium px-2 py-1 rounded-md transition-colors disabled:opacity-50"
                                         >
                                             Editar
+                                        </button>
+                                        <button
+                                            onClick={() => deleteClient(c.id)}
+                                            className="bg-red-100 hover:bg-red-200 text-red-800 text-xs font-medium px-2 py-1 rounded-md transition-colors"
+                                        >
+                                            Eliminar
                                         </button>
                                     </td>
                                 </tr>
@@ -104,23 +111,24 @@ export default function ClientsTable() {
             </p>
             {
                 modalData &&
-                <ModalForm
-                    title={
-                        modalData?.client_id
-                        ? 'Editar cliente'
-                        : 'Nuevo cliente'
-                    }
+                <ModalForm<Client>
+                    title={modalData?.id ? 'Editar cliente' : 'Nuevo cliente'}
                     fields={CLIENT_FIELDS}
                     initialData={modalData ?? undefined}
                     onClose={() => setModalData(null)}
                     onSubmit={async (data) => {
-                        console.log(data)
-                        if (data?.id) {
-                            console.log('Esta ejecutando el update')
-                            return await updateClient(
-                                data.id,
-                                data
-                            )
+                        console.log('La data es: ',data)
+
+                        if (modalData?.id) {
+                        console.log('Está ejecutando el update')
+
+                        return await updateClient(
+                            modalData.id,
+                            {
+                            ...modalData,
+                            ...data,
+                            }
+                        )
                         }
 
                         return await createClient(data)

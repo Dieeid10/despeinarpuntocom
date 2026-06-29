@@ -1,9 +1,4 @@
 'use client'
-import React from "react"
-// Navegation imports
-import { useRouter } from 'next/navigation'
-// Components imports
-import { AccessToken } from "./AccessToken"
 
 interface Props {
     token: string}

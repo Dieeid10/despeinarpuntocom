@@ -1,33 +1,29 @@
-import { client } from '@/services/api'
+import { api } from '@/services/api'
 import { urls } from './urls'
 import type { Asiento } from '@/interfaces'
 
 export const asientosServices = {
-    getAsientos: async () => {
-    return client.get(urls.asientos.getAll)
-  },
+  getAsientos: () =>
+    api.get<Asiento[]>(urls.asientos.getAll),
 
-  getAsientoById: async (asiento_id: number) => {
-    return client.get(urls.asientos.getById(asiento_id))
-  },
+  getAsientoById: (asiento_id: number) =>
+    api.get<Asiento>(urls.asientos.getById(asiento_id)),
 
-  getAsientosByVuelo: async (vuelo_id: number) => {
-    return client.get(urls.asientos.getByVuelo(vuelo_id))
-  },
+  getAsientosByVuelo: (vuelo_id: number) =>
+    api.get<Asiento[]>(urls.asientos.getByVuelo(vuelo_id)),
 
-  getAsientosDisponiblesByVuelo: async (vuelo_id: number) => {
-    return client.get(urls.asientos.getDisponiblesByVuelo(vuelo_id))
-  },
+  getAsientosDisponiblesByVuelo: (vuelo_id: number) =>
+    api.get<Asiento[]>(urls.asientos.getDisponiblesByVuelo(vuelo_id)),
 
-  createAsiento: async (data: Asiento) => {
-    return client.post(urls.asientos.create, data)
-  },
+  createAsiento: (data: Asiento) =>
+    api.post<Asiento, Asiento>(urls.asientos.create, data),
 
-  updateAsiento: async (asiento_id: number, data: Asiento) => {
-    return client.put(urls.asientos.update(asiento_id), data)
-  },
+  updateAsiento: (asiento_id: number, data: Partial<Asiento>) =>
+    api.put<Asiento, Partial<Asiento>>(
+      urls.asientos.update(asiento_id),
+      data
+    ),
 
-  deleteAsiento: async (asiento_id: number) => {
-    return client.delete(urls.asientos.delete(asiento_id))
-  },
+  deleteAsiento: (asiento_id: number) =>
+    api.delete<null>(urls.asientos.delete(asiento_id)),
 }

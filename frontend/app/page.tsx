@@ -9,7 +9,7 @@ export default async function Home() {
   if (token) {
     redirect('/dashboard')
   }
-
+  
   return (
     <main className="w-full h-full flex justify-center items-center rounded-xl">
       <Form />

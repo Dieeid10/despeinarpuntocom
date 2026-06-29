@@ -4,11 +4,12 @@ import { useState } from 'react'
 import { useUsers } from '@/hooks/useUsers'
 import { ModalForm } from '@/components/ui/modal'
 import { HeaderTagles } from '@/components/ui/HeaderTables'
+import { User } from '@/interfaces'
 
 const USER_FIELDS = [
   { key: 'nombre', label: 'Nombre', type: 'text' as const, required: true },
   { key: 'apellido', label: 'Apellido', type: 'text' as const, required: true },
-  { key: 'password', label: 'Password', type: 'test' as const, required: true },
+  { key: 'password', label: 'Password', type: 'password' as const, required: true },
   { key: 'email', label: 'Email', type: 'email' as const, required: true },
   {
     key: 'rol_id',
@@ -133,7 +134,7 @@ export default function UsersTable() {
             </p>
             {
                 modalData &&
-                <ModalForm
+                <ModalForm<User>
                     title={
                         modalData?.usuario_id
                         ? 'Editar cliente'
@@ -147,7 +148,7 @@ export default function UsersTable() {
                     initialData={modalData ?? undefined}
                     onClose={() => setModalData(null)}
                     onSubmit={async (data) => {
-                        console.log('La password es: ', data.password)
+                        
                         if (data?.usuario_id) {
                             return await updateUser(
                                 data.usuario_id,

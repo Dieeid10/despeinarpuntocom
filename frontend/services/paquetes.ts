@@ -1,11 +1,26 @@
-import { client } from '@/services/api'
+import { api } from '@/services/api'
 import { urls } from './urls'
-import { Paquete } from '@/interfaces'
+import type { Paquete } from '@/interfaces'
 
 export const paquetesServices = {
-    getPaquetes: () => client.get(urls.packages.getPackages),
-    getPaqueteById: (package_id: number) => client.get(urls.packages.getPackageById(package_id)),
-    createPaquete: (newPackage: Paquete) => client.post(urls.packages.createPackage, newPackage),
-    updatePaquete: (package_id: number, newPackage: Paquete) => client.put(urls.packages.updatePackage(package_id), newPackage),
-    deletePaquete: (package_id: number) => client.delete(urls.packages.deletePackage(package_id))
+  getPaquetes: () =>
+    api.get<Paquete[]>(urls.packages.getPackages),
+
+  getPaqueteById: (package_id: number) =>
+    api.get<Paquete>(urls.packages.getPackageById(package_id)),
+
+  createPaquete: (newPackage: Paquete) =>
+    api.post<Paquete, Paquete>(
+      urls.packages.createPackage,
+      newPackage
+    ),
+
+  updatePaquete: (package_id: number, newPackage: Partial<Paquete>) =>
+    api.put<Paquete, Partial<Paquete>>(
+      urls.packages.updatePackage(package_id),
+      newPackage
+    ),
+
+  deletePaquete: (package_id: number) =>
+    api.delete<null>(urls.packages.deletePackage(package_id)),
 }

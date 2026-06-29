@@ -5,20 +5,26 @@ import { useState } from 'react'
 interface Field {
     key: string
     label: string
-    type?: 'text' | 'email' | 'number' | 'date' | 'select'
+    type?: any
     options?: { value: string, label: string }[]
     required?: boolean
 }
 
-interface ModalFormProps {
+interface ModalFormProps<T extends Record<string, any>> {
   title: string
   fields: Field[]
-  initialData?: Record<string, any>
-  onSubmit: (data: Record<string, any>) => Promise<any>
+  initialData?: Partial<T>
+  onSubmit: (data: T) => Promise<any>
   onClose: () => void
 }
 
-export const ModalForm = ({ title, fields, initialData, onSubmit, onClose }: ModalFormProps) => {
+export const ModalForm = <T extends Record<string, any>>({
+  title,
+  fields,
+  initialData,
+  onSubmit,
+  onClose,
+}: ModalFormProps<T>) => {
     const [formData, setFormData] = useState<Record<string, any>>(
         initialData ?? Object.fromEntries(fields.map(f => [f.key, '']))
     )
@@ -34,7 +40,7 @@ export const ModalForm = ({ title, fields, initialData, onSubmit, onClose }: Mod
         setError(null)
 
         try {
-            const result = await onSubmit(formData)
+            const result = await onSubmit(formData as T)
 
             if (result?.success === false) {
             setError(result.message)

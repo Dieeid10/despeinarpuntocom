@@ -4,6 +4,7 @@ import { usePaquetes } from '@/hooks/usePackages'
 import { useState } from 'react'
 import { ModalForm } from '../ui/modal'
 import { HeaderTagles } from '../ui/HeaderTables'
+import { Paquete } from '@/interfaces'
 
 const formatPrecio = (precio: number) => `$${precio.toLocaleString('es-AR')}`
 
@@ -109,13 +110,13 @@ export default function PaquetesTable() {
                                     </td>
                                     <td className="flex flex-col justify-center items-start px-4 py-3 gap-4">
                                         <button
-                                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-md transition-colors"
+                                            className="bg-yellow-100 hover:bg-yellow-200 text-yellow-800 text-xs font-medium px-2 py-1 rounded-md transition-colors disabled:opacity-50"
                                             onClick={() => setModalData(p)}
                                         >
                                             Editar paquete
                                         </button>
                                         <button
-                                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-md transition-colors"
+                                            className="bg-red-100 hover:bg-red-200 text-red-800 text-xs font-medium px-2 py-1 rounded-md transition-colors"
                                             onClick={() => deletePaquete(p.paquete_id)}
                                         >
                                             Eliminar paquete
@@ -133,7 +134,7 @@ export default function PaquetesTable() {
             </p>
             {
                 modalData &&
-                <ModalForm
+                <ModalForm<Paquete>
                     title={
                         modalData?.paquete_id
                         ? 'Editar cliente'

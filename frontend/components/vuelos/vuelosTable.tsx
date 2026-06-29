@@ -4,6 +4,7 @@ import { useFlights } from "@/hooks/useFlights"
 import { useState } from 'react'
 import { ModalForm } from '@/components/ui/modal'
 import { HeaderTagles } from "../ui/HeaderTables"
+import { Vuelo } from "@/interfaces"
 
 const tipoStyles: Record<string, string> = {
     nacional: 'bg-blue-100 text-blue-800',
@@ -148,7 +149,7 @@ export function VuelosTable() {
             </p>
             {
                 modalData &&
-                <ModalForm
+                <ModalForm<Vuelo>
                     title={
                         modalData?.vuelo_id
                         ? 'Editar vuelo'
@@ -159,10 +160,10 @@ export function VuelosTable() {
                     onClose={() => setModalData(null)}
                     onSubmit={async (data) => {
                         console.log(data)
-                        if (data?.id) {
+                        if (data?.vuelo_id) {
                             console.log('Esta ejecutando el update')
                             return await updateFlight(
-                                data.id,
+                                data.vuelo_id,
                                 data
                             )
                         }
