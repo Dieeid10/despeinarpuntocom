@@ -76,7 +76,7 @@ export function useUsers() {
 
   const usersFiltrados = useMemo(() => {
       return state.users.filter((c) => {
-        const matchEstado = !state.filterRol || c.rol === state.filterRol
+        const matchEstado = !state.filterRol || c.rol_nombre.toLowerCase() === state.filterRol
   
         const matchBusqueda =
             !state.busqueda ||

@@ -1,6 +1,6 @@
 import { api } from '@/services/api'
 import { urls } from './urls'
-import type { User, Password, LoginData, UsersState } from '@/interfaces'
+import type { User, Password, LoginData } from '@/interfaces'
 
 export const usersServices = {
   login: (data: { username: string; password: string }) =>
@@ -10,7 +10,7 @@ export const usersServices = {
     ),
 
   getUsers: () =>
-    api.get<UsersState>(urls.users.getUsers),
+    api.get<User[]>(urls.users.getUsers),
 
   createUser: (newUser: User) =>
     api.post<User, User>(

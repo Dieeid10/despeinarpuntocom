@@ -72,12 +72,13 @@ export interface LoginData {
 
 export interface ServicioAdicionalReserva {
   servicio_id: number
-  nombre: string
   tipo: string
-  descripcion: string
-  precio: number
   cantidad: number
   subtotal: number
+  reservation_id?: number
+  nombre?: string
+  descripcion?: string
+  precio?: number
 }
 
 export interface ServiciosReservaState {

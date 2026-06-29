@@ -45,8 +45,13 @@ export const Form = () => {
             password: formDataEntries['password'] as string
         })
 
-        if (!result.success) {
-            setDataLogin((prevState) => ({ ...prevState, loading: false, error: result.message }))
+        if (!result.success || !result.data?.token) {
+            setDataLogin((prevState) => ({
+                ...prevState,
+                loading: false,
+                error: result.message,
+            }))
+
             return
         }
 
