@@ -1,6 +1,6 @@
 'use client'
 
-import { useVuelos } from "@/hooks/useFlights"
+import { useFlights } from "@/hooks/useFlights"
 import { useState } from 'react'
 import { ModalForm } from '@/components/ui/modal'
 import { HeaderTagles } from "../ui/HeaderTables"
@@ -31,7 +31,7 @@ const VUELO_FIELDS = [
 ]
 
 export function VuelosTable() {
-    const { state, patchState, fetchVuelos, createFlight, updateFlight, deleteFlight, vuelosFiltrados } = useVuelos()
+    const { state, patchState, fetchVuelos, createFlight, updateFlight, deleteFlight, vuelosFiltrados } = useFlights()
     const [modalData, setModalData] = useState<Record<string, any> | null>(null)
     console.log('La cantidad de vuelos recuperados son: ', vuelosFiltrados.length)
     

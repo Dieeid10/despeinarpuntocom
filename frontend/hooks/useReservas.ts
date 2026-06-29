@@ -42,6 +42,50 @@ export function useReservas() {
     })
   }
 
+  const getReservaFormById = async (reservaId: number) => {
+    return reservasServices.getReservaFormById(reservaId)
+  }
+
+  const createReserva = async (data: any) => {
+    const result = await reservasServices.createReserva(data)
+
+    if (result.success) {
+      await fetchReservas()
+    }
+
+    return result
+  }
+
+  const updateReserva = async (reservaId: number, data: any) => {
+    const result = await reservasServices.updateReserva(reservaId, data)
+
+    if (result.success) {
+      await fetchReservas()
+    }
+
+    return result
+  }
+
+  const deleteReserva = async (reservaId: number) => {
+    const result = await reservasServices.deleteReserva(reservaId)
+
+    if (result.success) {
+      await fetchReservas()
+    }
+
+    return result
+  }
+
+  const updateEstadoReserva = async (reservaId: number, estado: string) => {
+    const result = await reservasServices.updateEstadoReserva(reservaId, estado)
+
+    if (result.success) {
+      await fetchReservas()
+    }
+
+    return result
+  }
+
   useEffect(() => {
     fetchReservas()
   }, [])
@@ -72,7 +116,17 @@ export function useReservas() {
 
       return matchEstado && matchTipo && matchBusqueda
     })
-  }, [ state.reservas, state.filtroEstado, state.filtroTipo, state.busqueda ])
+  }, [state.reservas, state.filtroEstado, state.filtroTipo, state.busqueda])
 
-  return { ...state, patchState, fetchReservas, reservasFiltradas }
+  return {
+    ...state,
+    patchState,
+    fetchReservas,
+    getReservaFormById,
+    createReserva,
+    updateReserva,
+    deleteReserva,
+    updateEstadoReserva,
+    reservasFiltradas,
+  }
 }

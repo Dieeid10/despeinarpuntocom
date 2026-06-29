@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { serviciosReservaServices } from '@/services/services'
 import type { ServicioAdicionalReserva, ServiciosReservaState } from '@/interfaces'
 
-export function useServiciosReserva(reservaId?: number | null) {
+export function useServiciosAdicionales(reservaId?: number | null) {
   const [state, setState] = useState<ServiciosReservaState>({
     servicios: [],
     loading: false,

@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { clientsServices } from '@/services/clients'
 import type { ClientsState, Client } from '@/interfaces'
 
-export function useClients() {
+export function useClient() {
   const [state, setState] = useState<ClientsState>({
     clients: [],
     loading: true,

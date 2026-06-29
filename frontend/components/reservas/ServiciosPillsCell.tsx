@@ -1,7 +1,7 @@
-import { useServiciosReserva } from '@/hooks/useServiciosReserva'
+import { useServiciosAdicionales } from '@/hooks/useServiciosAdicionales'
 
 export function ServiciosPillsCell({ reservaId }: { reservaId: number }) {
-  const { servicios, loading, error } = useServiciosReserva(reservaId)
+  const { servicios, loading, error } = useServiciosAdicionales(reservaId)
 
   if (loading) {
     return <span className="text-xs text-gray-400">Cargando...</span>

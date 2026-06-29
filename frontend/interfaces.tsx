@@ -110,9 +110,11 @@ export interface Vuelo {
 }
 
 export interface PaquetesState {
-    vuelos: Paquete[]
+    paquetes: Paquete[]
     loading: boolean
     error: string | null
+    busqueda: string
+    filterType: string
 }
 
 export interface Paquete {
@@ -122,7 +124,20 @@ export interface Paquete {
   duracion_dias: number
   precio: number
   activo: boolean
-
   cantidad_vuelos: number
   cantidad_servicios: number
+}
+
+export interface AsientosState {
+    asientos: Asiento[]
+    loading: boolean
+    error: string | null
+}
+
+export interface Asiento {
+    asiento_id: number
+    vuelo_id: number
+    tipo_asiento: string
+    numero_asiento: string
+    precio_base: number
 }

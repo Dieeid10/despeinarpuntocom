@@ -1,6 +1,6 @@
 'use client'
 
-import { useClients } from '@/hooks/useClient'
+import { useClient } from '@/hooks/useClient'
 import { useState } from 'react'
 import { ModalForm } from '@/components/ui/modal'
 import { HeaderTagles } from '../ui/HeaderTables'
@@ -16,7 +16,7 @@ const CLIENT_FIELDS = [
 ]
 
 export default function ClientsTable() {
-    const { state, patchState, fetchClients, createClient, updateClient, deleteClient, clientsFiltrados } = useClients()
+    const { state, patchState, fetchClients, createClient, updateClient, deleteClient, clientsFiltrados } = useClient()
     const [modalData, setModalData] = useState<Record<string, any> | null>(null)
 
     if (state.loading) return (

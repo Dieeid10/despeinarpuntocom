@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { vuelosServices } from '@/services/vuelos'
 import type { Vuelo, VuelosState } from '@/interfaces'
 
-export function useVuelos() {
+export function useFlights() {
     const [state, setState] = useState<VuelosState>({
         vuelos: [],
         loading: true,

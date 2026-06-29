@@ -1,77 +1,66 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { paquetesServices } from '@/services/paquetes'
-
-interface Paquete {
-    paquete_id: number
-    nombre: string
-    descripcion: string
-    duracion_dias: number
-    precio: number
-    activo: boolean
-    cantidad_vuelos: number
-    cantidad_servicios: number
-}
+import { usePaquetes } from '@/hooks/usePackages'
+import { useState } from 'react'
+import { ModalForm } from '../ui/modal'
+import { HeaderTagles } from '../ui/HeaderTables'
 
 const formatPrecio = (precio: number) => `$${precio.toLocaleString('es-AR')}`
 
+const PACKAGE_FIELDS = [
+  { key: 'nombre', label: 'Nombre', type: 'text' as const, required: true },
+  { key: 'descripcion', label: 'Descripción', type: 'text' as const, required: true },
+  { key: 'duracion_dias', label: 'Duración en días', type: 'number' as const, required: true },
+  { key: 'precio', label: 'Precio', type: 'number' as const, required: true },
+  {
+    key: 'activo',
+    label: 'Estado',
+    type: 'select' as const,
+    options: [
+      { value: 'true', label: 'Activo' },
+      { value: 'false', label: 'Inactivo' },
+    ],
+    required: true,
+  },
+]
+
 export default function PaquetesTable() {
-    const [paquetes, setPaquetes]         = useState<Paquete[]>([])
-    const [loading, setLoading]           = useState(true)
-    const [error, setError]               = useState<string | null>(null)
-    const [filtroActivo, setFiltroActivo] = useState('')
-    const [busqueda, setBusqueda]         = useState('')
+    const { state, patchState, fetchPaquetes, createPaquete, updatePaquete, deletePaquete, paquetesFiltrados } = usePaquetes()
+    const [ modalData, setModalData ] = useState<Record<string, any> | null>(null)
 
-    useEffect(() => {
-        const fetchPaquetes = async () => {
-            const result = await paquetesServices.getPaquetes()
-            if (!result.success) {
-                setError(result.message)
-            } else {
-                setPaquetes(result.data)
-            }
-            setLoading(false)
-        }
-        fetchPaquetes()
-    }, [])
-
-    const paquetesFiltrados = paquetes.filter(p => {
-        const matchActivo   = !filtroActivo || (filtroActivo === 'activo' ? p.activo : !p.activo)
-        const matchBusqueda = !busqueda     || p.nombre.toLowerCase().includes(busqueda.toLowerCase())
-        return matchActivo && matchBusqueda
-    })
-
-    if (loading) return (
+    if (state.loading) return (
         <div className="flex justify-center items-center h-full">
             <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
         </div>
     )
 
-    if (error) return (
+    if (state.error) return (
         <div className="p-6">
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-                {error}
+                {state.error}
             </div>
         </div>
     )
 
     return (
-        <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-6">Paquetes</h2>
+        <>
+            <HeaderTagles
+                title='Paquetes'
+                textButton='+ Nuevo paquete'
+                openModal={() => setModalData({})}
+            />
 
-            {/* Filtros */}
             <div className="flex gap-3 mb-6 flex-wrap">
                 <input
                     type="text"
                     placeholder="Buscar paquete..."
-                    value={busqueda}
-                    onChange={e => setBusqueda(e.target.value)}
+                    value={state.busqueda}
+                    onChange={e => patchState({ busqueda: e.target.value})}
                     className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <select
-                    value={filtroActivo}
-                    onChange={e => setFiltroActivo(e.target.value)}
+                    value={state.filterType}
+                    onChange={e => patchState({ filterType: e.target.value})}
                     className="border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                     <option value="">Todos</option>
@@ -93,6 +82,7 @@ export default function PaquetesTable() {
                             <th className="px-4 py-3 text-left">Vuelos</th>
                             <th className="px-4 py-3 text-left">Servicios</th>
                             <th className="px-4 py-3 text-left">Estado</th>
+                            <th className="px-4 py-3 text-left">Acciones</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
@@ -117,6 +107,20 @@ export default function PaquetesTable() {
                                             {p.activo ? 'activo' : 'inactivo'}
                                         </span>
                                     </td>
+                                    <td className="flex flex-col justify-center items-start px-4 py-3 gap-4">
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-md transition-colors"
+                                            onClick={() => setModalData(p)}
+                                        >
+                                            Editar paquete
+                                        </button>
+                                        <button
+                                            className="bg-blue-500 hover:bg-blue-600 text-white text-xs px-4 py-2 rounded-md transition-colors"
+                                            onClick={() => deletePaquete(p.paquete_id)}
+                                        >
+                                            Eliminar paquete
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
                         )}
@@ -127,6 +131,29 @@ export default function PaquetesTable() {
             <p className="text-xs text-gray-400 mt-2">
                 {paquetesFiltrados.length} paquetes encontrados
             </p>
-        </div>
+            {
+                modalData &&
+                <ModalForm
+                    title={
+                        modalData?.paquete_id
+                        ? 'Editar cliente'
+                        : 'Nuevo cliente'
+                    }
+                    fields={ PACKAGE_FIELDS }
+                    initialData={modalData ?? undefined}
+                    onClose={() => setModalData(null)}
+                    onSubmit={async (data) => {
+                        if (data?.paquete_id) {
+                            return await updatePaquete(
+                                data.paquete_id,
+                                data
+                            )
+                        }
+                        console.log(data)
+                        return await createPaquete(data)
+                    }}
+                />
+            }
+        </>
     )
 }

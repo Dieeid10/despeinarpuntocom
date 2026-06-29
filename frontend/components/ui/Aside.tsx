@@ -10,27 +10,27 @@ const sections = [
     {
         title: 'ADMINISTRACIÓN',
         links: [
-            { href: '/dashboard', label: 'Panel general', icon: Home, roles: ['gerente'] },
-            { href: '/usuario', label: 'Usuarios y roles', icon: Gear, roles: ['gerente'] },
-            { href: '/aeropuertos', label: 'Aeropuertos', icon: Home, roles: ['gerente'] },
-            { href: '/aerolineas', label: 'Aerolíneas', icon: Home, roles: ['gerente'] },
+            { href: '/dashboard', label: 'Panel general', roles: ['gerente'] },
+            { href: '/usuario', label: 'Usuarios y roles', roles: ['gerente'] },
+            { href: '/aeropuertos', label: 'Aeropuertos', roles: ['gerente'] },
+            { href: '/aerolineas', label: 'Aerolíneas', roles: ['gerente'] },
         ]
     },
     {
         title: 'OPERACIONES',
         links: [
-            { href: '/reserva',  label: 'Reservas',  icon: Home, roles: ['gerente', 'operario'] },
-            { href: '/vuelos',    label: 'Vuelos',    icon: Home, roles: ['gerente', 'operario'] },
-            { href: '/paquete',  label: 'Paquetes',  icon: Home, roles: ['gerente', 'operario'] },
-            { href: '/cliente',  label: 'Clientes',  icon: Home, roles: ['gerente', 'operario'] },
+            { href: '/reserva',  label: 'Reservas',  roles: ['gerente', 'operario'] },
+            { href: '/vuelos',    label: 'Vuelos',    roles: ['gerente', 'operario'] },
+            { href: '/paquete',  label: 'Paquetes',  roles: ['gerente', 'operario'] },
+            { href: '/cliente',  label: 'Clientes',  roles: ['gerente', 'operario'] },
         ]
     },
     {
         title: 'FINANZAS',
         links: [
-            { href: '/financiero',   label: 'Resumen financiero', icon: Home, roles: ['gerente', 'finanzas'] },
-            { href: '/pagos',        label: 'Pagos',              icon: Home, roles: ['gerente', 'finanzas'] },
-            { href: '/comprobantes', label: 'Comprobantes',       icon: Home, roles: ['gerente', 'finanzas'] },
+            { href: '/financiero',   label: 'Resumen financiero', roles: ['gerente', 'finanzas'] },
+            { href: '/pagos',        label: 'Pagos',              roles: ['gerente', 'finanzas'] },
+            { href: '/comprobantes', label: 'Comprobantes',       roles: ['gerente', 'finanzas'] },
         ]
     },
 ]
@@ -77,7 +77,7 @@ export const Aside = ({ rol }: Props) => {
                                 {title}
                             </p>
                             <ul>
-                                {visibleLinks.map(({ href, label, icon: Icon }) => {
+                                {visibleLinks.map(({ href, label }) => {
                                     const isActive = pathname === href
                                     return (
                                         <li key={href}>
@@ -89,7 +89,6 @@ export const Aside = ({ rol }: Props) => {
                                                         : 'text-[var(--tipografy-subtitle)] hover:bg-gray-100'
                                                     }`}
                                             >
-                                                <Icon />
                                                 <span>{label}</span>
                                             </Link>
                                         </li>
